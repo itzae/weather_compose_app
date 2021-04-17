@@ -8,9 +8,6 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 //Custom color
-val SkyColor600 = Color(0xFF35D6ED)
-val SkyColor500 = Color(0xFF65DDEF)
-val SkyColor400 = Color(0xFF7AE5F5)
-val SkyColor300 = Color(0xFF97EBF4)
-val SkyColor200 = Color(0xFFC9F6FF)
-val WhiteTransparent = Color(0x14FFFFFF)
+val SkyColor600 = Color(0xFF53BEF5)
+val Purple300 = Color(0xFFBA68C8)
+val WhiteTransparent = Color(0x75FFFFFF)

@@ -7,13 +7,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.graphics.Color
+import android.os.Build
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.core.content.ContextCompat
 import com.example.weathercomposeapp.ui.screens.HomeScreen
 import com.example.weathercomposeapp.ui.viewmodel.WeatherViewModel
-import com.example.weathercomposeapp.util.checkLocation
+import com.example.weathercomposeapp.util.Extensions.checkLocation
+import com.example.weathercomposeapp.util.Extensions.fullScreen
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +33,7 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             if (permissions[ACCESS_FINE_LOCATION] == true && permissions[ACCESS_COARSE_LOCATION] == true) {
                 checkLocation(fusedLocationClient) { latitude, longitude ->
-                    //viewModel.getPosition("$latitude,$longitude")
+                    viewModel.getPosition("$latitude,$longitude")
                 }
             } else {
                 Log.i("TAG", "permission: denied")
@@ -40,11 +45,20 @@ class MainActivity : ComponentActivity() {
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initComponents()
+        setContent {
+            HomeScreen(
+                data = viewModel.dataCurrentCondition,
+                viewModel.city,
+                viewModel.dataForecasts
+            )
+        }
+    }
+
+    private fun initComponents(){
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getPermissionsLocation()
-        setContent {
-            HomeScreen(data = viewModel.dataCurrentCondition, viewModel.city)
-        }
+        fullScreen()
     }
 
     private fun getPermissionsLocation() {

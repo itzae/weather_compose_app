@@ -2,6 +2,7 @@ package com.example.weathercomposeapp.data.repository
 
 import com.example.weathercomposeapp.BuildConfig
 import com.example.weathercomposeapp.data.model.CurrentConditionResponse
+import com.example.weathercomposeapp.data.model.ForecastResponse
 import com.example.weathercomposeapp.data.model.GeoPositionResponse
 import com.example.weathercomposeapp.data.network.WeatherApi
 
@@ -12,5 +13,9 @@ class WeatherRepositoryImpl(private val weatherService: WeatherApi) : WeatherRep
     }
 
     override suspend fun getCurrentCondition(locationKey: Int): CurrentConditionResponse =
-        weatherService.getCurrentConditions(locationKey, BuildConfig.API_KEY,"es")
+        weatherService.getCurrentConditions(locationKey, BuildConfig.API_KEY)
+
+    override suspend fun getForecasts(locationKey: Int): ForecastResponse =
+        weatherService.getForecasts(locationKey, BuildConfig.API_KEY)
+
 }

@@ -1,16 +1,12 @@
 package com.example.weathercomposeapp.ui.activity
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.graphics.Color
-import android.os.Build
-import android.view.View
-import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,7 +29,10 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             if (permissions[ACCESS_FINE_LOCATION] == true && permissions[ACCESS_COARSE_LOCATION] == true) {
                 checkLocation(fusedLocationClient) { latitude, longitude ->
-                    viewModel.getPosition("$latitude,$longitude")
+                    if (latitude != null && longitude != null)
+                        viewModel.getPosition("$latitude,$longitude")
+                    else
+                        viewModel.updateAlertState(false)
                 }
             } else {
                 Log.i("TAG", "permission: denied")
@@ -50,12 +49,15 @@ class MainActivity : ComponentActivity() {
             HomeScreen(
                 data = viewModel.dataCurrentCondition,
                 viewModel.city,
-                viewModel.dataForecasts
-            )
+                viewModel.dataForecasts,
+                viewModel.isEnabledGps
+            ){
+                viewModel.updateAlertState(it)
+            }
         }
     }
 
-    private fun initComponents(){
+    private fun initComponents() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getPermissionsLocation()
         fullScreen()
@@ -69,7 +71,10 @@ class MainActivity : ComponentActivity() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 Log.i("TAG", "Permission: Granted")
                 checkLocation(fusedLocationClient) { latitude, longitude ->
-                    //viewModel.getPosition("$latitude,$longitude")
+                    if (latitude != null && longitude != null)
+                        viewModel.getPosition("$latitude,$longitude")
+                    else
+                        viewModel.updateAlertState(false)
                 }
             }
             shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION) -> {

@@ -14,16 +14,17 @@ import com.google.android.gms.location.LocationResult
 
 fun ComponentActivity.checkLocation(
     fusedLocationProviderClient: FusedLocationProviderClient,
-    location: (Double, Double) -> Unit
+    location: (Double?, Double?) -> Unit
 ) {
     val manager =
         getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val isNetworkEnabled = manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     val isGPSEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-    if (!isNetworkEnabled || !isGPSEnabled)
+    if (!isNetworkEnabled || !isGPSEnabled) {
+        location(null, null)
         Log.e("TAG", "checkLocation: please enabled GPS")
-    else {
+    } else {
         fusedLocationProviderClient.getLocation { latitude, longitude ->
             location(latitude, longitude)
         }

@@ -1,6 +1,7 @@
 package com.example.weathercomposeapp.domain.model
 
 import com.example.weathercomposeapp.data.model.DailyForecast
+import com.example.weathercomposeapp.util.Extensions.getDateFromEpoch
 
 data class Forecasts(
     val day: String,
@@ -10,7 +11,7 @@ data class Forecasts(
 )
 
 fun DailyForecast.toDataForecasts() = Forecasts(
-    day = this.epochDate.toString(),
+    day = this.epochDate.getDateFromEpoch(),
     minTemperature = this.temperature.minimum.value.toString(),
     maxTemperature = this.temperature.maximum.value.toString(),
     icon = this.day.icon

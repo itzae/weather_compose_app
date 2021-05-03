@@ -12,5 +12,6 @@ data class CurrentConditionResponseItem(
     @SerializedName("PrecipitationType") val precipitationType: Any,
     @SerializedName("Temperature") val temperature: Elevation,
     @SerializedName("WeatherIcon") val weatherIcon: Int,
-    @SerializedName("WeatherText") val weatherText: String
+    @SerializedName("WeatherText") val weatherText: String,
+    @SerializedName("Wind") val wind: Wind
 )

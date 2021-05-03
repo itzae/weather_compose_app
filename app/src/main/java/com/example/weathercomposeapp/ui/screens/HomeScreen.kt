@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.weathercomposeapp.domain.model.CurrentCondition
 import com.example.weathercomposeapp.domain.model.Forecasts
+import com.example.weathercomposeapp.ui.components.AlertGPS
 import com.example.weathercomposeapp.ui.components.CardCurrentCondition
 import com.example.weathercomposeapp.ui.components.ForecastList
 import com.example.weathercomposeapp.ui.theme.Purple300
@@ -19,17 +20,19 @@ import com.example.weathercomposeapp.ui.theme.WeatherComposeAppTheme
 
 
 @Composable
-fun HomeScreen(data: CurrentCondition, cityName: String, forecastsData: List<Forecasts>) {
-    val listForecast = listOf(
-        Forecasts("Lun", "31", "38", 2),
-        Forecasts("Lun", "31", "38", 2),
-        Forecasts("Lun", "31", "38", 2),
-        Forecasts("Lun", "31", "38", 2),
-        Forecasts("Lun", "31", "38", 2)
-    )
-    WeatherComposeAppTheme {
-        // A surface container using the 'background' color from the theme
+fun HomeScreen(
+    data: CurrentCondition,
+    cityName: String,
+    forecastsData: List<Forecasts>,
+    isEnabledGps: Boolean,
+    onConfirmDialog: (Boolean) -> Unit
+) {
 
+    WeatherComposeAppTheme {
+        //This validation show alert when the GPS is disabled
+        if (!isEnabledGps) AlertGPS {
+            onConfirmDialog(true)
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -54,8 +57,8 @@ fun HomeScreen(data: CurrentCondition, cityName: String, forecastsData: List<For
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(start = 8.dp, end = 8.dp,top = 16.dp),
-                listForecast
+                    .padding(start = 8.dp, end = 8.dp, top = 16.dp),
+                forecastsData
             )
         }
     }
@@ -71,5 +74,5 @@ fun PreviewCard() {
 @Preview
 @Composable
 fun PreviewScreen() {
-    HomeScreen(data = CurrentCondition("38°"), cityName = "Arcelia", listOf())
+    HomeScreen(data = CurrentCondition("38°"), cityName = "Arcelia", listOf(), true,{})
 }

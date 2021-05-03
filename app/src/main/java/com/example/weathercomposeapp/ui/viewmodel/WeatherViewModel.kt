@@ -28,6 +28,9 @@ class WeatherViewModel @ViewModelInject constructor(private val weatherRepositor
     var city by mutableStateOf("")
         private set
 
+    var isEnabledGps by mutableStateOf(false)
+        private set
+
     fun getPosition(location: String) {
         viewModelScope.launch {
             try {
@@ -45,5 +48,9 @@ class WeatherViewModel @ViewModelInject constructor(private val weatherRepositor
                 Log.e("TAG", "getPosition: Error ${e.code()}")
             }
         }
+    }
+
+    fun updateAlertState(isEnabled: Boolean) {
+        isEnabledGps = isEnabled
     }
 }

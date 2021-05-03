@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Weather Compose App</string>
     <string name="next_forecast_five_days">Pronóstico siguientes 5 días</string>
+    <string name="direction_wind">Dirección del viento</string>
 </resources>

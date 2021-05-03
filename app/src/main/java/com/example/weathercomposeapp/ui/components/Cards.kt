@@ -3,27 +3,18 @@ package com.example.weathercomposeapp.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.weathercomposeapp.R
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.animatedVectorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.weathercomposeapp.data.model.Wind
 import com.example.weathercomposeapp.domain.model.CurrentCondition
 import com.example.weathercomposeapp.domain.model.Forecasts
 import com.example.weathercomposeapp.ui.theme.WhiteTransparent
@@ -34,7 +25,10 @@ import androidx.compose.foundation.layout.Arrangement as layoutAlignment
 fun CardCurrentCondition(data: CurrentCondition, cityName: String, modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(verticalArrangement = layoutAlignment.Center) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = layoutAlignment.Center
+            ) {
 
                 LabelWithIcon(
                     textParam = cityName,
@@ -48,7 +42,9 @@ fun CardCurrentCondition(data: CurrentCondition, cityName: String, modifier: Mod
                     Image(
                         painterResource(id = data.iconId.getIconForecast()),
                         contentDescription = " ",
-                        modifier = Modifier.padding(end = 16.dp)
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .align(Alignment.CenterVertically)
                     )
                     Text(
                         text = "${data.temperature}°",
@@ -62,6 +58,8 @@ fun CardCurrentCondition(data: CurrentCondition, cityName: String, modifier: Mod
                     style = MaterialTheme.typography.subtitle2.copy(color = Color.White)
 
                 )
+                WindSection(data.directionWind,data.speedWind)
+
             }
             Divider(
                 modifier = Modifier
@@ -70,8 +68,36 @@ fun CardCurrentCondition(data: CurrentCondition, cityName: String, modifier: Mod
                     .border(width = 1.dp, color = WhiteTransparent)
             )
         }
+
     }
 
+}
+
+@Composable
+fun WindSection(directionWind: String, speedWind: String, modifier: Modifier = Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        AnimatedImage(
+            modifier = Modifier
+                .size(100.dp)
+                .padding(top = 16.dp)
+        )
+        Column {
+            Row {
+                Text(
+                    text = "Dirección del viento",
+                    style = MaterialTheme.typography.subtitle2.copy(color = WhiteTransparent)
+                )
+                Text(text = directionWind, modifier = Modifier.padding(start = 16.dp))
+            }
+            Row {
+                Text(
+                    text = "Velocidad del viento",
+                    style = MaterialTheme.typography.subtitle2.copy(color = Color.White)
+                )
+                Text(text = speedWind, modifier = Modifier.padding(start = 16.dp))
+            }
+        }
+    }
 }
 
 @Composable
@@ -79,12 +105,14 @@ fun ItemDayCondition(forecastsData: Forecasts) {
 
     Row(
         modifier = Modifier
-            .padding(top=16.dp,start = 8.dp, end = 8.dp)
+            .padding(top = 16.dp, start = 8.dp, end = 8.dp)
     ) {
         Text(
-            text = "Lun",
+            text = forecastsData.day,
             style = MaterialTheme.typography.caption.copy(color = Color.White),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Image(
@@ -98,7 +126,9 @@ fun ItemDayCondition(forecastsData: Forecasts) {
         Text(
             text = "${forecastsData.minTemperature}° / ${forecastsData.maxTemperature}°",
             style = MaterialTheme.typography.caption.copy(color = Color.White),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically),
             textAlign = TextAlign.End
         )
     }
@@ -110,4 +140,10 @@ fun ItemDayCondition(forecastsData: Forecasts) {
 @Composable
 fun PreviewItemDayCondition() {
     ItemDayCondition(Forecasts("Mar", "27°", "38°", 1))
+}
+
+@Preview(name = "CardCurrentCondition")
+@Composable
+fun PreviewCurrentCondition() {
+    CardCurrentCondition(data = CurrentCondition("31"), cityName = "Arcelia")
 }

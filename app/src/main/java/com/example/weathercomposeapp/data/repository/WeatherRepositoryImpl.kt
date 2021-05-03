@@ -13,7 +13,7 @@ class WeatherRepositoryImpl(private val weatherService: WeatherApi) : WeatherRep
     }
 
     override suspend fun getCurrentCondition(locationKey: Int): CurrentConditionResponse =
-        weatherService.getCurrentConditions(locationKey, BuildConfig.API_KEY)
+        weatherService.getCurrentConditions(locationKey, BuildConfig.API_KEY, details = true)
 
     override suspend fun getForecasts(locationKey: Int): ForecastResponse =
         weatherService.getForecasts(locationKey, BuildConfig.API_KEY)

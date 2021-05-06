@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "API_KEY", "\"xVpCqju0MXWouNHoRD0Rx5Dv9oImJeTd\"")
+        buildConfigField("String", "API_KEY", "\"INSERT_YOU_API_KEY\"")
         buildConfigField("String", "BASE_URL", "\"http://dataservice.accuweather.com\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
